@@ -28,8 +28,34 @@ function renderBreedsList(selector, markup) {
   selector.insertAdjacentHTML('beforeend', markup);
 }
 
+function createListElements(arr) {
+  return arr
+    .map(({ name, id }) => `<option value="${id}">${name}</option>`)
+    .join('');
+}
+
 function renderCatInfo(selector, markup) {
   selector.innerHTML = markup;
 }
 
-export { fetchBreeds, fetchCatByBreed, renderBreedsList, renderCatInfo };
+function createMurkup({ url, breeds }) {
+  const markup = breeds.map(({ name, description, temperament }) => {
+    return `<img src="${url}" alt="${name}" width=300>
+      <div>
+      <h2>${name}</h2>
+      <p>${description}</p>
+      <p><b>Temperament:</b> ${temperament}</p>
+      </div>`;
+  });
+
+  return markup;
+}
+
+export {
+  fetchBreeds,
+  createListElements,
+  renderBreedsList,
+  fetchCatByBreed,
+  createMurkup,
+  renderCatInfo,
+};
