@@ -1,4 +1,6 @@
 import { fetchBreeds, fetchCatByBreed, createListElements, createMurkup, renderBreedsList, renderCatInfo } from "./js/cat-api";
+import SlimSelect from 'slim-select';
+import 'slim-select/dist/slimselect.css';
 
 const breedSelect = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
@@ -17,6 +19,8 @@ fetchBreeds()
     const breedsList = createListElements(breeds);
 
     renderBreedsList(breedSelect, breedsList);
+
+    new SlimSelect({select: '#selectElement'});
   })
   .catch(error => {
     addCssClass(loaderMsg, visuallyHidden);
