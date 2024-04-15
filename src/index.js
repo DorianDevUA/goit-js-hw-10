@@ -1,11 +1,12 @@
 import { fetchBreeds, fetchCatByBreed, createListElements, createMurkup, renderBreedsList, renderCatInfo } from "./js/cat-api";
+import Notiflix from 'notiflix';
 import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
 
 const breedSelect = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
 const loaderMsg = document.querySelector('.loader');
-const errorMsg = document.querySelector('.error');
+// const errorMsg = document.querySelector('.error');
 
 const visuallyHidden = 'visually-hidden';
 
@@ -24,14 +25,18 @@ fetchBreeds()
   })
   .catch(error => {
     addCssClass(loaderMsg, visuallyHidden);
-    removeCssClass(errorMsg, visuallyHidden);
+    // removeCssClass(errorMsg, visuallyHidden);
 
-    console.log(error)
+    Notiflix.Report.failure(
+      `${error}`,
+      'Oops! Something went wrong! Try reloading the page!',
+      'Okey'
+    );
   });
 
 function onChangeSelect(evt) {
   removeCssClass(loaderMsg, visuallyHidden);
-  addCssClass(errorMsg, visuallyHidden);
+  // addCssClass(errorMsg, visuallyHidden);
   addCssClass(catInfo, visuallyHidden);
 
   const selectedBreed = evt.currentTarget.value;
@@ -50,9 +55,12 @@ function onChangeSelect(evt) {
     })
     .catch(error => {
       addCssClass(loaderMsg, visuallyHidden);
-      removeCssClass(errorMsg, visuallyHidden);
-
-      console.log(error)
+      // removeCssClass(errorMsg, visuallyHidden);
+      Notiflix.Report.failure(
+        `${error}`,
+        'Oops! Something went wrong! Try reloading the page!',
+        'Okey'
+      );
     });
 }
 
