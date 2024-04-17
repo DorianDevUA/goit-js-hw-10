@@ -38,15 +38,13 @@ function renderCatInfo(selector, markup) {
   selector.innerHTML = markup;
 }
 
-function createMurkup({ url, breeds }) {
-  const markup = breeds.map(({ name, description, temperament }) => {
-    return `<img src="${url}" alt="${name}" width=300>
+function createMurkup({ url, breeds: [{name, description, temperament}] }) {
+  const markup = `<img src="${url}" alt="${name}" width=300>
       <div>
       <h2>${name}</h2>
       <p>${description}</p>
       <p><b>Temperament:</b> ${temperament}</p>
       </div>`;
-  });
 
   return markup;
 }
