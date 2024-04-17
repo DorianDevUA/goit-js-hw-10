@@ -1,12 +1,20 @@
-import { fetchBreeds, fetchCatByBreed, createListElements, createMurkup, renderBreedsList, renderCatInfo } from "./js/cat-api";
+import {
+  fetchBreeds,
+  fetchCatByBreed,
+  createListElements,
+  createMurkup,
+  renderBreedsList,
+  renderCatInfo,
+} from './js/cat-api';
 import Notiflix from 'notiflix';
 import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
 
 const breedSelect = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
-const loaderMsg = document.querySelector('.loader');
-// const errorMsg = document.querySelector('.error');
+const loaderField = document.querySelector('.loader');
+// const errorField = document.querySelector('.error');
+const errorMsg = 'Oops! Something went wrong! Try reloading the page!';
 
 const visuallyHidden = 'visually-hidden';
 
@@ -15,28 +23,24 @@ breedSelect.addEventListener('change', onChangeSelect);
 fetchBreeds()
   .then(breeds => {
     removeCssClass(breedSelect, visuallyHidden);
-    addCssClass(loaderMsg, visuallyHidden);
+    addCssClass(loaderField, visuallyHidden);
 
     const breedsList = createListElements(breeds);
 
     renderBreedsList(breedSelect, breedsList);
 
-    new SlimSelect({select: '#selectElement'});
+    new SlimSelect({ select: '#selectElement' });
   })
   .catch(error => {
-    addCssClass(loaderMsg, visuallyHidden);
-    // removeCssClass(errorMsg, visuallyHidden);
+    addCssClass(loaderField, visuallyHidden);
+    // removeCssClass(errorField, visuallyHidden);
 
-    Notiflix.Report.failure(
-      `${error}`,
-      'Oops! Something went wrong! Try reloading the page!',
-      'Okey'
-    );
+    Notiflix.Report.failure(`${error}`, errorMsg, 'Okey');
   });
 
 function onChangeSelect(evt) {
-  removeCssClass(loaderMsg, visuallyHidden);
-  // addCssClass(errorMsg, visuallyHidden);
+  removeCssClass(loaderField, visuallyHidden);
+  // addCssClass(errorField, visuallyHidden);
   addCssClass(catInfo, visuallyHidden);
 
   const selectedBreed = evt.currentTarget.value;
@@ -44,23 +48,18 @@ function onChangeSelect(evt) {
 
   fetchCatByBreed(selectedBreed)
     .then(response => {
-      response.map(cat => {
-        addCssClass(loaderMsg, visuallyHidden);
-        removeCssClass(catInfo, visuallyHidden);
+      addCssClass(loaderField, visuallyHidden);
+      removeCssClass(catInfo, visuallyHidden);
 
-        const markup = createMurkup(cat);
+      const [cat] = response;
+      const markup = createMurkup(cat);
 
-        renderCatInfo(catInfo, markup);
-      });
+      renderCatInfo(catInfo, markup);
     })
     .catch(error => {
-      addCssClass(loaderMsg, visuallyHidden);
-      // removeCssClass(errorMsg, visuallyHidden);
-      Notiflix.Report.failure(
-        `${error}`,
-        'Oops! Something went wrong! Try reloading the page!',
-        'Okey'
-      );
+      addCssClass(loaderField, visuallyHidden);
+      // removeCssClass(errorField, visuallyHidden);
+      Notiflix.Report.failure(`${error}`, errorMsg, 'Okey');
     });
 }
 
